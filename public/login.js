@@ -6,6 +6,7 @@ fetch('/api/login',{method:'POST',
     body:JSON.stringify({username:username,password:pass}),
 }).then(res => {
     if(res.status==200){
+        console.log('return 200')
         return res.json();
     }else{
         alert('user not found');
@@ -18,3 +19,5 @@ window.location.href='/adminpage';
 window.location.href='/mainpage';
 }
 })})
+
+let deneme = ()=>console.log('burdayım');

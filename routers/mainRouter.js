@@ -7,6 +7,9 @@ pageRouter.get('/login',(req,res)=>{
 pageRouter.get('/mainpage',(req,res)=>{
     res.render(path.join(__dirname,'../views/mainpage.ejs'),{books:'hehe'})
 })
+pageRouter.get('/file/:file',(req,res)=>{
+    res.send(path.join(__dirname,'../public/login.js'));
+})
 module.exports = {
     pageRouter,
 }
