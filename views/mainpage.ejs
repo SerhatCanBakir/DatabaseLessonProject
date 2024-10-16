@@ -7,49 +7,34 @@
     <link rel="stylesheet" href="mainpage.css">
 </head>
 <body>
-    <%=books%>
     <header>
         <h1>Online Book Store</h1>
         <nav>
             <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Books</a></li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="/">Home</a></li>
+                <li><a href="/books">Books</a></li>
+                <li><a href="/contact">Contact</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
         <section class="books">
-            <h2>Available Books</h2>
-            <div class="book">
-                <img src="book1.jpg" alt="Book 1">
-                <h3>Book Title 1</h3>
-                <p>Author: Author 1</p>
-                <p>Price: $15</p>
-                <button>Add to Cart</button>
-            </div>
-
-            <div class="book">
-                <img src="book2.jpg" alt="Book 2">
-                <h3>Book Title 2</h3>
-                <p>Author: Author 2</p>
-                <p>Price: $20</p>
-                <button>Add to Cart</button>
-            </div>
-
-            <div class="book">
-                <img src="book3.jpg" alt="Book 3">
-                <h3>Book Title 3</h3>
-                <p>Author: Author 3</p>
-                <p>Price: $18</p>
-                <button>Add to Cart</button>
-            </div>
+            
+            <% if (books && books.length > 0) { %>
+                <% books.forEach(function(book) { %>
+                    <div class="book">
+                        <img src="book1.jpg" alt="<%= book.title %>">
+                        <h3><%= book.title %></h3>
+                        <p>Author: <%= book.author_id %></p>
+                        <p>Price: $<%= book.price %></p>
+                        <button>Add to Cart</button>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <p>No books available at the moment.</p>
+            <% } %>
         </section>
     </main>
-
-    <footer>
-        <p>&copy; 2024 Online Book Store. All rights reserved.</p>
-    </footer>
 </body>
 </html>
