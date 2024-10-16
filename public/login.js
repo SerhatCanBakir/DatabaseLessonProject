@@ -1,6 +1,10 @@
+
+
+document.getElementById('loginBtn').addEventListener('click',()=>{  
+
 var username = document.getElementById('usernameText').value;
 var pass = document.getElementById('passwordText').value;
-document.getElementById('loginBtn').addEventListener('click',()=>{
+console.log(username+"/"+pass);
 fetch('/api/login',{method:'POST',
     headers:{'content-type':'application/json'},
     body:JSON.stringify({username:username,password:pass}),
@@ -21,3 +25,4 @@ window.location.href='/mainpage';
 })})
 
 let deneme = ()=>console.log('burdayım');
+deneme();

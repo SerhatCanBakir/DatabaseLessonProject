@@ -18,7 +18,7 @@ return}
   console.log('DATABASE CONNECTİON SUCCESSFUL');
 })
 const Login = (username,password)=>{
-    const qry = "SELECT * FROM users HAVING username= ?";
+    const qry = "SELECT * FROM users WHERE username= ?";
     return new Promise((resolve,rejects)=>{
     connection.query(qry,username,(err,resuts)=>{
         if(err){
@@ -26,7 +26,9 @@ const Login = (username,password)=>{
             rejects(err)
         }
         else{
-            if(password==resuts.password){ resolve(resuts)}else{
+            console.log(resuts);
+            console.log(password+"/"+resuts[0].password);
+            if(password==resuts[0].password){ resolve(resuts)}else{
                 resolve(false);
             }
         }
@@ -71,6 +73,54 @@ const SellBook = (id,piece)=>{
 
         })
     })
+}
+const AddToCart = (userId,BookId,piece,)=> {
+ //sepete ürün ekleme yapılıcak
+}
+
+const CreateSales = (userId,BookdID,piece)=>{
+// satış faturası oluşturulucak
+}
+
+const AddExistedBook = (id,piece)=>{
+const qry1= "Select * FROM books WHERE id=?"
+const qry2 = "UPDATE books Set stock =? WHERE id=?"
+return new Promise((resolve,rejects)=>{
+    connection.query(qry1,id,(err,data)=>{
+        if(err){
+            console.log(err);
+            rejects(err);
+        }
+    piece += data.stockİ
+    connection.query(qry2,[piece,id],(err,data)=>{
+        if(err){
+            console.log(err)
+            rejects(err);
+        }
+        resolve(data.affectedRows);
+    })
+
+    })
+   
+}
+
+)
+}
+
+const AddNewBook = ()=>{
+// sistemde olmayan yeni kitap ekle 
+}
+
+const CreateNewAuth = ()=>{
+// sisteme yeni yazar ekle
+}
+
+const Register = ()=>{
+    //yeni kullanıcı yarat 
+}
+
+const CreateNewCart = ()=>{
+    // yeni bir sepet yarat yeni kullanıcı için 
 }
 
 module.exports={

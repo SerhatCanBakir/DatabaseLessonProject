@@ -8,7 +8,8 @@ pageRouter.get('/mainpage',(req,res)=>{
     res.render(path.join(__dirname,'../views/mainpage.ejs'),{books:'hehe'})
 })
 pageRouter.get('/file/:file',(req,res)=>{
-    res.send(path.join(__dirname,'../public/login.js'));
+  
+    res.sendFile(path.join(__dirname,'../public/',req.params.file));
 })
 module.exports = {
     pageRouter,

@@ -10,8 +10,8 @@ apiRouter.post('/login',(req,res)=>{
         resp=>{
             console.log(resp);
             if(resp){
-            const token = jwt.sign(resp,process.env.TOKEN,{expiresIn:60*60})
-             const returnObject = {token:token,role:resp.role}
+            const token = jwt.sign(resp[0],process.env.TOKEN,{expiresIn:60*60})
+             const returnObject = {token:token,role:resp[0].role}
              res.status(200);
              res.send(returnObject);}else{
                 res.sendStatus(403);
