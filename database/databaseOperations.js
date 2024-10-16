@@ -1,8 +1,5 @@
-const { rejects } = require('assert');
-const { query } = require('express');
+
 const mysql2 = require('mysql2');
-const { resolve } = require('path');
-const { Connection } = require('pg');
 require('dotenv').config(require('path').resolve(__dirname, '../.env'));
 
 var connection = mysql2.createConnection({
@@ -41,6 +38,7 @@ const Login = (username, password) => {
 
 const TakeAllBooks = () => {
     const qry = "SELECT * FROM books";
+    const qry2 = "SELECT * FROM authors"
     return new Promise((resolve, rejects) => {
         connection.query(qry, (err, resuts) => {
             if (err) {
@@ -48,7 +46,12 @@ const TakeAllBooks = () => {
                 rejects(err)
             } else {
                 
-                resolve(resuts);
+                connection.query(qry2,(err,resuts2)=>{
+                    resuts.forEach(Element2=>{
+                        Element2.author_id = resuts2[Element2.author_id-1].name;
+                    })
+                    resolve(resuts);
+                })
             }
         })
     })
