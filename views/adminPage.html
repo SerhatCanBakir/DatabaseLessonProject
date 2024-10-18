@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="/file/adminPage.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Admin Panel</h1>
+        
+        <!-- Kitap Ekleme Alanı -->
+        <div class="form-section">
+            <h2>Kitap Ekle</h2>
+            <label for="bookTitle">Kitap Adı:</label>
+            <input type="text" id="bookTitle" name="bookTitle">
+                
+            <label for="bookAuthor">Yazar Adı:</label>
+            <input type="text" id="bookAuthor" name="bookAuthor">
+                
+            <label for="bookSummary">Özeti:</label>
+            <textarea id="bookSummary" name="bookSummary" rows="4"></textarea>
+                
+            <label for="bookStock">Stok:</label>
+            <input type="number" id="bookStock" name="bookStock">
+                
+            <label for="bookPrice">Fiyat:</label>
+            <input type="number" id="bookPrice" name="bookPrice" step="0.01">
+                
+            <button id="addBookButton">Kitap Ekle</button>
+        </div>
+
+        <!-- Yazar Ekleme Alanı -->
+        <div class="form-section">
+            <h2>Yazar Ekle</h2>
+            <label for="authorName">Yazar Adı:</label>
+            <input type="text" id="authorName" name="authorName">
+                
+            <button id="addAuthorButton">Yazar Ekle</button>
+        </div>
+
+        <!-- Stok Güncelleme Alanı -->
+        <div class="form-section">
+            <h2>Stok İşlemleri</h2>
+            <label for="selectedBook">Kitap Seç:</label>
+            <select id="selectedBook" name="selectedBook">
+                <option value="">Bir kitap seçin</option>
+                <!-- Bu seçenekler dinamik olarak doldurulmalı -->
+                <option value="kitap1">Kitap 1</option>
+                <option value="kitap2">Kitap 2</option>
+                <option value="kitap3">Kitap 3</option>
+            </select>
+                
+            <label for="stockAction">İşlem:</label>
+            <select id="stockAction" name="stockAction">
+                <option value="add">Stok Ekle</option>
+                <option value="update">Stok Güncelle</option>
+            </select>
+
+            <label for="newStockAmount">Yeni Stok Miktarı:</label>
+            <input type="number" id="newStockAmount" name="newStockAmount">
+                
+            <button id="stockActionButton">İşlemi Uygula</button>
+        </div>
+    </div>
+
+    <script src="/file/adminPage.js"></script>
+</body>
+</html>

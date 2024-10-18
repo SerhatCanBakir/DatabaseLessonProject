@@ -1,0 +1,57 @@
+body {
+    font-family: Arial, sans-serif; /* Yazı tipi */
+    margin: 0;
+    padding: 0;
+    display: flex; /* Flexbox kullanarak ortalamak için */
+    justify-content: center; /* Yatayda ortalama */
+    align-items: center; /* Dikeyde ortalama */
+    height: 100vh; /* Sayfa yüksekliğini kapsayacak şekilde ayarla */
+    background-color: #f0f0f0; /* Arka plan rengi */
+}
+
+.container {
+    background-color: white; /* Beyaz arka plan */
+    padding: 20px; /* İç boşluk */
+    border-radius: 8px; /* Kenarları yuvarlama */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Gölge efekti */
+    width: 400px; /* Genişlik ayarı */
+}
+
+h1, h2 {
+    text-align: center; /* Başlıkları ortala */
+}
+
+.form-section {
+    margin: 20px 0; /* Form bölümleri arasındaki boşluk */
+}
+
+label {
+    display: block; /* Label'ları blok öğesi yap */
+    margin-bottom: 5px; /* Label ile input arasındaki boşluk */
+}
+
+input[type="text"],
+input[type="number"],
+textarea,
+select {
+    width: 100%; /* Tüm input ve select'leri tam genişlikte yap */
+    padding: 10px; /* İç boşluk */
+    margin-bottom: 10px; /* Aşağıda boşluk oluştur */
+    border: 1px solid #ccc; /* Kenar rengi */
+    border-radius: 4px; /* Kenar yuvarlama */
+    box-sizing: border-box; /* Kutunun boyutunu içerik ile birlikte ayarla */
+}
+
+button {
+    width: 100%; /* Butonları tam genişlikte yap */
+    padding: 10px; /* İç boşluk */
+    background-color: #007bff; /* Buton arka plan rengi */
+    color: white; /* Yazı rengi */
+    border: none; /* Kenar yok */
+    border-radius: 4px; /* Kenar yuvarlama */
+    cursor: pointer; /* Fare imlecini değiştir */
+}
+
+button:hover {
+    background-color: #0056b3; /* Hover efekti */
+}

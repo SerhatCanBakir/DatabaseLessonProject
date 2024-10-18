@@ -16,7 +16,7 @@ fetch('/api/login',{method:'POST',
         alert('user not found');
     }
 }).then(data =>{
-document.cookie = 'token:'+data.token+';';
+document.cookie = 'token='+data.token+';';
 if(data.role=='admin'){
 window.location.href='/adminpage';
 }else{

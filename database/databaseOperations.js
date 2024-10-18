@@ -1,5 +1,7 @@
 
+
 const mysql2 = require('mysql2');
+
 require('dotenv').config(require('path').resolve(__dirname, '../.env'));
 
 var connection = mysql2.createConnection({
@@ -45,10 +47,10 @@ const TakeAllBooks = () => {
                 console.log(err);
                 rejects(err)
             } else {
-                
-                connection.query(qry2,(err,resuts2)=>{
-                    resuts.forEach(Element2=>{
-                        Element2.author_id = resuts2[Element2.author_id-1].name;
+
+                connection.query(qry2, (err, resuts2) => {
+                    resuts.forEach(Element2 => {
+                        Element2.author_id = resuts2[Element2.author_id - 1].name;
                     })
                     resolve(resuts);
                 })
@@ -57,7 +59,7 @@ const TakeAllBooks = () => {
     })
 }
 
-const SellBook = (id, piece) => {
+const SellBook = (userid, id, piece) => {
     const qry1 = "SELECT * FROM books WHERE id = ?";
     const qry2 = "UPDATE books Set stock = ? WHERE id = ?";
     return new Promise((resolve, rejects) => {
@@ -74,19 +76,52 @@ const SellBook = (id, piece) => {
                     rejects(err);
                 }
 
-                resolve(ress.affectedRows);
+                CreateSales(userid, id, piece).then(resp => {
+                    const TSO = { sales: resp, selled: ress.affectedRows }
+                    resolve(TSO);
+                }).catch();
+
+
             })
 
 
         })
     })
 }
-const AddToCart = (userId, BookId, piece,) => {
-    //sepete ürün ekleme yapılıcak
+const AddToCart = (userId, BookId, piece) => {
+    const qry1 = "INSERT INTO cart_items(cart_id,book_id,quantity)";
+    return new Promise((resolve, rejects) => {
+        connection.query(qry1, [userId, BookId, piece], (err, data) => {
+            if (err) {
+                console.log(err);
+                rejects(err);
+
+            }
+            resolve(data.affectedRows);
+        })
+    })
 }
 
 const CreateSales = (userId, BookdID, piece) => {
-    // satış faturası oluşturulucak
+    const qry1 = "INSERT INTO sales(user_id,book_id,quantity,price) VALUES(?,?,?,?)";
+    const qry2 = "SELECT * FROM books WHERE id=?";
+    return new Promise((resolve, rejects) => {
+        connection.query(qry2, BookdID, (err, rest) => {
+            if (err) {
+                console.log(err);
+                rejects(err);
+            }
+            console.log(rest);
+            const salesPrice = rest[0].price * piece;
+            connection.query(qry1, [userId, BookdID, piece, salesPrice], (err, resp) => {
+                if (err) {
+                    console.log(err);
+                    rejects(err);
+                }
+                resolve(resp.affectedRows);
+            })
+        })
+    })
 }
 
 const AddExistedBook = (id, piece) => {
@@ -114,45 +149,83 @@ const AddExistedBook = (id, piece) => {
     )
 }
 
-const AddNewBook = () => {
-    // sistemde olmayan yeni kitap ekle 
-}
-
-const CreateNewAuth = () => {
-    // sisteme yeni yazar ekle
-}
-
-const Register = (username,pass) => {
-   const qry1 = "SELECT * FROM users WHERE username=?";
-   const qry2 = "INSERT INTO users (username,password,role) VALUES(?,?,'user')"
-   
-   return new Promise((resolve,rejects)=>{
-   connection.query(qry1,username,(err,data)=>{
-    if(err){
-        console.log(err);
-        rejects(err)
-        return;
-    }
-
-    if(data.length==0){
-        connection.query(qry2,[username,pass],(err,data)=>{
-            if(err){
-                console.log(err);
+const AddNewBook = (title, author, genre, description, stock, price) => {
+    const qry1 = "SELECT * from author Where name=?";
+    const qry2 = "INSERT INTO books(title,author_id,genre,description,stock,price) VALUES(?,?,?,?,?,?)";
+    return new Promise((resolve, rejects) => {
+        connection.query(qry1, author, (err, data) => {
+            if (err) {
                 rejects(err);
+                console.log(err);
+            }
+            let authorid = data[0].id;
+            connection.query(qry2, [title, authorid, genre, description, stock, price], (err, data2) => {
+                if (err) {
+                    console.log(err);
+                    rejects(err)
+                }
+                resolve(data2);
+            })
+        })
+    })
+}
+
+const CreateNewAuth = (author) => {
+    const qry = "INSERT INTO authors (name) VALUES(?)"
+    return new Promise((resolve, rejects) => {
+        connection.query(qry, author, (err, datas) => {
+            if (err) {
+                rejects(err);
+            }
+            resolve(datas);
+        })
+    })
+
+}
+
+const Register = (username, pass) => {
+    const qry1 = "SELECT * FROM users WHERE username=?";
+    const qry2 = "INSERT INTO users (username,password,role) VALUES(?,?,'user')"
+
+    return new Promise((resolve, rejects) => {
+        connection.query(qry1, username, (err, data) => {
+            if (err) {
+                console.log(err);
+                rejects(err)
                 return;
             }
 
-            resolve(data.affectedRows[0]);
-        })
-    }
+            if (data.length == 0) {
+                connection.query(qry2, [username, pass], (err, data) => {
+                    if (err) {
+                        console.log(err);
+                        rejects(err);
+                        return;
+                    }
+                    CreateNewCart(data[0].id).then(resp => {
+                        console.log(resp);
+                        resolve(data.affectedRows[0]);
+                    });
 
-   })
-   })
-   
+                })
+            }
+
+        })
+    })
+
 }
 
-const CreateNewCart = () => {
-    // yeni bir sepet yarat yeni kullanıcı için 
+const CreateNewCart = (userid) => {
+    const qry1 = "INSERT INTO CARTS(user_id)";
+    return new Promise((resolve, rejects) => {
+        connection.query(qry1, userid, (err, datas) => {
+            if (err) {
+                console.log(err);
+                rejects(err);
+            }
+            resolve(datas.affectedRows);
+        })
+    })
 }
 
 module.exports = {
