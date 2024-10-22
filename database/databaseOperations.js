@@ -1,6 +1,11 @@
 
 
+const { rejects } = require('assert');
+const { realpath } = require('fs');
 const mysql2 = require('mysql2');
+const { resolve } = require('path');
+const { title } = require('process');
+const { CardColumns } = require('reactstrap');
 
 require('dotenv').config(require('path').resolve(__dirname, '../.env'));
 
@@ -57,6 +62,19 @@ const TakeAllBooks = () => {
             }
         })
     })
+}
+const TakeAllAuthors = ()=>{
+ const qry1 = "SELECT * FROM authors";
+ return new Promise((resolve,rejects)=>{
+    connection.query(qry1,(err,data)=>{
+        if(err){
+            console.log(err);
+            rejects(err);
+        }else{
+            resolve(data);
+        }
+    })
+ })
 }
 
 const SellBook = (userid, id, piece) => {
@@ -124,16 +142,17 @@ const CreateSales = (userId, BookdID, piece) => {
     })
 }
 
-const AddExistedBook = (id, piece) => {
-    const qry1 = "Select * FROM books WHERE id=?"
+const AddExistedBook = (title, piece) => {
+    const qry1 = "Select * FROM books WHERE title=?"
     const qry2 = "UPDATE books Set stock =? WHERE id=?"
     return new Promise((resolve, rejects) => {
-        connection.query(qry1, id, (err, data) => {
+        connection.query(qry1, title, (err, data) => {
             if (err) {
                 console.log(err);
                 rejects(err);
             }
-            piece += data.stockİ
+            var id = data[0].id;
+            piece += data.stock
             connection.query(qry2, [piece, id], (err, data) => {
                 if (err) {
                     console.log(err)
@@ -150,7 +169,7 @@ const AddExistedBook = (id, piece) => {
 }
 
 const AddNewBook = (title, author, genre, description, stock, price) => {
-    const qry1 = "SELECT * from author Where name=?";
+    const qry1 = "SELECT * from authors Where name=?";
     const qry2 = "INSERT INTO books(title,author_id,genre,description,stock,price) VALUES(?,?,?,?,?,?)";
     return new Promise((resolve, rejects) => {
         connection.query(qry1, author, (err, data) => {
@@ -224,10 +243,33 @@ const CreateNewCart = (userid) => {
                 rejects(err);
             }
             resolve(datas.affectedRows);
-        })
+        }) 
     })
 }
 
+const updateBookStock= (bookName,newStock)=>{
+    const qry1 = 'SELECT * FROM books WHERE title=?';
+    const qry2 = 'UPDATE books Set stock=? WHERE id=?'
+  return new Promise((resolve,rejects)=>{
+    connection.query(qry1,title,(err,data)=>{
+        if(err){
+            console.log(err);
+            rejects(err);
+        }else{
+           let id = data[0].id; 
+           connection.query(qry2,[newStock,id],(err,data2)=>{
+            if(err){
+                console.log(err);
+                rejects(err);
+            }else{
+                resolve(data2[0]);
+
+            }
+           })
+        }
+    })
+  })
+}
 module.exports = {
     Login,
     Register,
@@ -239,5 +281,6 @@ module.exports = {
     CreateSales,
     SellBook,
     TakeAllBooks,
-
+updateBookStock,
+TakeAllAuthors,
 }

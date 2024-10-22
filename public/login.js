@@ -9,13 +9,14 @@ fetch('/api/login',{method:'POST',
     headers:{'content-type':'application/json'},
     body:JSON.stringify({username:username,password:pass}),
 }).then(res => {
+    console.log(res);
     if(res.status==200){
         console.log('return 200')
         return res.json();
     }else{
         alert('user not found');
-    }
-}).then(data =>{
+    }   
+}).then(data =>{    
 document.cookie = 'token='+data.token+';';
 if(data.role=='admin'){
 window.location.href='/adminpage';

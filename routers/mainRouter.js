@@ -4,10 +4,9 @@ const path = require('path');
 require('dotenv').config(require('path').resolve(__dirname,'../.env'));
 const jwt = require('jsonwebtoken');
 const {TakeAllBooks} = require('../database/databaseOperations.js');
-const cookieParser = require('cookie-parser');
 
 
- pageRouter.use(cookieParser());
+
 
  const verifyTokenFromCookieToAdmin = (req, res, next) => {
     // Cookie'den token'ı al
