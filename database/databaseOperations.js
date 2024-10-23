@@ -1,11 +1,10 @@
 
 
-const { rejects } = require('assert');
-const { realpath } = require('fs');
+
 const mysql2 = require('mysql2');
-const { resolve } = require('path');
+
 const { title } = require('process');
-const { CardColumns } = require('reactstrap');
+
 
 require('dotenv').config(require('path').resolve(__dirname, '../.env'));
 
@@ -152,13 +151,13 @@ const AddExistedBook = (title, piece) => {
                 rejects(err);
             }
             var id = data[0].id;
-            piece += data.stock
+            piece += parseInt(data[0].stock)
             connection.query(qry2, [piece, id], (err, data) => {
                 if (err) {
                     console.log(err)
                     rejects(err);
                 }
-                resolve(data.affectedRows);
+                resolve(data);
             })
 
         })
@@ -251,11 +250,12 @@ const updateBookStock= (bookName,newStock)=>{
     const qry1 = 'SELECT * FROM books WHERE title=?';
     const qry2 = 'UPDATE books Set stock=? WHERE id=?'
   return new Promise((resolve,rejects)=>{
-    connection.query(qry1,title,(err,data)=>{
+    connection.query(qry1,bookName,(err,data)=>{
         if(err){
             console.log(err);
             rejects(err);
         }else{
+            console.log(data);
            let id = data[0].id; 
            connection.query(qry2,[newStock,id],(err,data2)=>{
             if(err){

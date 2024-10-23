@@ -1,3 +1,5 @@
+
+
 document.getElementById('addBookButton').addEventListener('click',()=>{
 /* 
 title,author,genre,description,stock,price
@@ -39,7 +41,21 @@ document.getElementById('addAuthorButton').addEventListener('click',()=>{
 })
 
 document.getElementById('stockActionButton').addEventListener('click',()=>{
-    
+    const station = document.getElementById('stockAction').value;
+    const book = document.getElementById('selectedBook').value;
+    const stock = document.getElementById('newStockAmount').value;
+
+    fetch('/api/changestock',{method:"POST",headers:{'content-type':'application/json'
+        },body:JSON.stringify({type:station,title:book,piece:parseInt(stock)})
+    }).then(resp=>{if(resp.status==200){
+        return resp.json();
+    }else if(resp.status==400){
+alert("hatali giris")
+    }else{
+alert("server patladı")
+    }}).then(data=>{
+        alert("data değişti"+data.title);
+    })
 })
 
 //burda da stock ve yazar seçenekleri gereken yerlerde datalar doldurulucak !!!

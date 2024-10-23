@@ -94,16 +94,17 @@ apiRouter.post('/addauthor', verifyTokenFromCookieToAdmin, (req, res) => {
 
 
 apiRouter.post('/changestock', verifyTokenFromCookieToAdmin, (req, res) => {
-    if (req.body.type == 0) {
-        let title = req.body.title;
+    console.log(req.body);
+    let title = req.body.title;
         let piece = req.body.piece;
-        if (title && piece) {
+    if (title&&piece) {
+        if (req.body.type == 'add') {
             AddExistedBook(title, piece).then(resp => {
                 res.sendStatus(200).json(resp[0]);
             }).catch(err => {
                 res.status(500).send(err);
             });
-        } else if (req.body.type == 1) {
+        } else if (req.body.type == 'update') {
             updateBookStock(title, piece).then(resp => {
                 res.status(200).json(resp);
             }).catch(err => {
