@@ -51,6 +51,13 @@ const verifyTokenFromCookie = (req, res, next) => {
     });
 };
 
+pageRouter.get('/cart',verifyTokenFromCookie,(req,res)=>{
+    TakeAllBooks().then(resp=>{
+        res.render(path.join(__dirname,"../views/cart.ejs"),{cartItems:resp});
+    })
+   
+})
+
 pageRouter.get('/login',(req,res)=>{
     res.sendFile(path.join(__dirname,'../views/login.html'));
 })

@@ -60,6 +60,7 @@ alert("server patladı")
 
 //burda da stock ve yazar seçenekleri gereken yerlerde datalar doldurulucak !!!
 const bookSelector =  document.getElementById('selectedBook');
+const booKdelete = document.getElementById('DeleteAction')
 fetch('/api/getallbooks').then(res=>res.json()).then(resp=>{
     if(Array.isArray(resp.titles)){
         for(let i=0;i<resp.titles.length;i++){
@@ -67,7 +68,9 @@ fetch('/api/getallbooks').then(res=>res.json()).then(resp=>{
         let opt = document.createElement('option');
         opt.value =resp.titles[i];
         opt.innerHTML= resp.titles[i];
+
         bookSelector.appendChild(opt);
+        booKdelete.appendChild(opt);
         }
        }
 }
@@ -88,4 +91,19 @@ fetch('/api/getallauthers').then(resp=>resp.json()).then(data=>{
    }
 })
 
+
+document.getElementById('deleteActionBotton').addEventListener('click',()=>{
+ const title=document.getElementById('DeleteAction').value;
+fetch('/api/deletebook',{method:"DELETE",
+    headers:{'content-type':'application/json'},
+    body:JSON.stringify({title:title})
+}).then(resp=>{
+    if(resp.status==200){
+     alert("deleted");
+    }else{
+    alert("ERROR");
+    }
+})
+
+})
 /* */

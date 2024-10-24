@@ -2,7 +2,7 @@ const { Router } = require('express');
 const apiRouter = Router();
 const jwt = require('jsonwebtoken');
 require('dotenv').config(require('path').resolve(__dirname, '../.env'));
-const { Login, Register, AddNewBook, CreateNewAuth, AddExistedBook, updateBookStock ,TakeAllBooks,TakeAllAuthors} = require('../database/databaseOperations.js');
+const { Login, Register, AddNewBook, CreateNewAuth, AddExistedBook, updateBookStock, TakeAllBooks, TakeAllAuthors, deleteBook } = require('../database/databaseOperations.js');
 
 
 
@@ -96,8 +96,8 @@ apiRouter.post('/addauthor', verifyTokenFromCookieToAdmin, (req, res) => {
 apiRouter.post('/changestock', verifyTokenFromCookieToAdmin, (req, res) => {
     console.log(req.body);
     let title = req.body.title;
-        let piece = req.body.piece;
-    if (title&&piece) {
+    let piece = req.body.piece;
+    if (title && piece) {
         if (req.body.type == 'add') {
             AddExistedBook(title, piece).then(resp => {
                 res.sendStatus(200).json(resp[0]);
@@ -118,39 +118,48 @@ apiRouter.post('/changestock', verifyTokenFromCookieToAdmin, (req, res) => {
     }
 })
 
-apiRouter.get('/getallbooks',(req,res)=>{
-   TakeAllBooks().then(resp=>{
-   // console.log(resp)
-    if(Array.isArray(resp)){
-        console.log('array kontrolu calisiyo');
-        let titles = [];
-        for(let i=0;i<resp.length;i++){
-            
-        //    console.log(resp[i]);
-            if(resp!=undefined){
-           titles.push(resp[i].title);}
-        }
-        res.json({titles:titles});
-    }else{
-        res.sendStatus(500);
-    }
-   }).catch(err=>{
-    console.log(err)
-    res.sendStatus(500);
-   })})
+apiRouter.get('/getallbooks', (req, res) => {
+    TakeAllBooks().then(resp => {
+        // console.log(resp)
+        if (Array.isArray(resp)) {
+            console.log('array kontrolu calisiyo');
+            let titles = [];
+            for (let i = 0; i < resp.length; i++) {
 
-apiRouter.get('/getallauthers',(req,res)=>{
-    TakeAllAuthors().then(resp=>{
+                //    console.log(resp[i]);
+                if (resp != undefined) {
+                    titles.push(resp[i].title);
+                }
+            }
+            res.json({ titles: titles });
+        } else {
+            res.sendStatus(500);
+        }
+    }).catch(err => {
+        console.log(err)
+        res.sendStatus(500);
+    })
+})
+
+apiRouter.get('/getallauthers', (req, res) => {
+    TakeAllAuthors().then(resp => {
         let authorsname = [];
-        if(Array.isArray(resp)){
-            for(let i=0;i<resp.length;i++){
+        if (Array.isArray(resp)) {
+            for (let i = 0; i < resp.length; i++) {
                 authorsname.push(resp[i].name);
             }
-            res.send({author:authorsname});
-        }else{
+            res.send({ author: authorsname });
+        } else {
             res.sendStatus(500);
         }
     })
+})
+
+apiRouter.delete('/deletebook', verifyTokenFromCookieToAdmin, (req, res) => {
+    let title = req.body.title;
+    if (title) {
+        deleteBook(title).then(resp => { res.sendStatus(200) }).catch(err => res.status(500));
+    }
 })
 
 module.exports = {

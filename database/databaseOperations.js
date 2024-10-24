@@ -1,7 +1,9 @@
 
 
 
+const { rejects } = require('assert');
 const mysql2 = require('mysql2');
+const { resolve } = require('path');
 
 const { title } = require('process');
 
@@ -86,7 +88,7 @@ const SellBook = (userid, id, piece) => {
                 rejects(err);
             }
 
-            piece = result.stock - piece;
+            piece = parseInt(result.stock) - parseInt(piece);
             connection.query(qry2, [piece, id], (err, ress) => {
                 if (err) {
                     console.log(err);
@@ -270,6 +272,21 @@ const updateBookStock= (bookName,newStock)=>{
     })
   })
 }
+
+const deleteBook=(title)=>{
+    const qry = "DELETE from books WHERE title=?"
+ return new Promise((resolve,rejects)=>{   
+connection.query(qry,title,(err,data)=>{
+if(err){
+    console.log(err);
+    rejects(err)
+}else{
+    resolve(data);
+}
+})})
+}
+
+
 module.exports = {
     Login,
     Register,
@@ -283,4 +300,5 @@ module.exports = {
     TakeAllBooks,
 updateBookStock,
 TakeAllAuthors,
+deleteBook,
 }

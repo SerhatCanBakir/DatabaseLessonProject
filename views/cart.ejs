@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="/file/cart.css">
+</head>
+<body>
+    <header>
+        <h1>Shopping Cart</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="cart">
+            <% if (cartItems && cartItems.length > 0) { %>
+                <% cartItems.forEach(function(item, index) { %>
+                    <div class="cart-item">
+                        <img src="book1.jpg" alt="<%= item.title %>">
+                        <h3><%= item.title %></h3>
+                        <p>Author: <%= item.author_id %></p>
+                        <p>Price: $<%= item.price %></p>
+                        <button >Remove</button>
+                    </div>
+                <% }) %>
+                <div class="cart-actions">
+                    <p>Total: $<%= cartItems.reduce((total, item) => total + item.price, 0) %></p>
+                    <button >Purchase</button>
+                </div>
+            <% } else { %>
+                <p>Your cart is empty.</p>
+            <% } %>
+        </section>
+    </main>
+
+    <script>
+        function removeFromCart(index) {
+            // Sepetten ürünü silmek için AJAX isteği veya form submit işlemi yapılabilir
+            alert("Item removed from cart: " + index);
+        }
+
+        function purchaseCart() {
+            // Sepeti satın almak için AJAX isteği veya form submit işlemi yapılabilir
+            alert("Purchase complete!");
+        }
+    </script>
+</body>
+</html>
